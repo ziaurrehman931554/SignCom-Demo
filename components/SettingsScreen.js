@@ -12,7 +12,6 @@ import { useIsFocused } from '@react-navigation/native';
 const Stack = createStackNavigator();
 
 const SettingsScreen = ({ userToken, onLogout, navigation }) => {
-  console.log(',,,')
   const { appStyles, toggleBG, toggleColor, toBlue, toWhite } = useStyle();
   const isFocused = useIsFocused();
 

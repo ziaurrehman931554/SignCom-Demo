@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { View, Text, Button, TouchableOpacity, StyleSheet, Image } from "react-native";
+import React from "react";
+import { View, Text, Button, TouchableOpacity, StyleSheet, Image, Platform } from "react-native";
 import { useStyle } from '../AppStyle';
 
 export default function AccountScreen({userToken, onLogout, navigation}){
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: Platform.OS === 'ios'? 'white' : '',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 1 },
         shadowOpacity: 0.2,

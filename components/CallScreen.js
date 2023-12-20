@@ -41,7 +41,7 @@ const CallScreen = ({navigation, user}) => {
       <View style={styles.joinContainer}>
         <Text style={styles.title}>Generate a Call ID {u && (<Text>for {u}</Text>)}</Text>
         <View style={styles.imgContainer}>
-          <Image source={require('../assets/generate.png')} style={styles.img}/>
+          <Image source={require('../assets/join.png')} style={styles.img}/>
         </View>
         <Text style={styles.id}>{callID}</Text>
         <TouchableOpacity style={styles.btn} onPress={generateCallID}>

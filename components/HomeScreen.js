@@ -11,7 +11,6 @@ import  AccountScreen from './AccountScreen'
 const Stack = createStackNavigator();
  
 const HomeScreen = ({userToken, store, navigation}) => {
-  console.log(userToken)
   const { appStyles, toHomeColor } = useStyle();
   const [search, setSearch] = useState('');
   const isFocused = useIsFocused();
