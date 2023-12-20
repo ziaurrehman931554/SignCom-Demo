@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "SignCom",
-    "slug": "SignCom Video Calling | Hand Sign Recognition",
+    "slug": "signcom-video-calling-hand-sign-recognition",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
