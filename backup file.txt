@@ -1,0 +1,274 @@
+// export default function App({ onLogout, userToken, reset }) {
+//     const { appStyles, toggleBG, toggleColor, toBlue, toWhite } = useStyle();
+//     const [user, setUser] = useState('');
+
+//   function CallsScreenWithProps({ navigation }) {
+//     return <CallsScreen userToken={userToken} store={store} navigation={navigation}/>;
+//   }
+  
+//   function SettingsScreenWithProps({ navigation }) {
+//     return <SettingsScreen userToken={userToken} onLogout={onLogout} reset={reset} />;
+//   }
+
+//   function MainScreen({navigation}) {
+//     useEffect(() => {
+//       toBlue();
+//     }, [])
+//     return (
+//       <View style={[appStyles.container, appStyles.background]}>
+//           <Tab.Navigator
+//             screenOptions={({ route }) => ({
+//               tabBarIcon: ({ focused }) => {
+//                 let imageSource;
+//                 let imageSize = 30;
+//                 const imageOpacity = focused ? 1 : 0.5;
+//                 if (route.name === 'Calls') {
+//                   imageSource = require('../assets/call.png');
+//                 } 
+//                 else if (route.name === 'Settings') {
+//                   imageSource = require('../assets/settings.png');
+//                 }
+//                 return (
+//                   <View style={styles.tabIconContainer}>
+//                     <Image
+//                       source={imageSource}
+//                       style={{ width: imageSize, height: imageSize, opacity: imageOpacity }}
+//                     />
+//                     {focused && (<Text style={{fontSize: 10,}}>{route.name}</Text>)}
+//                   </View>
+//                 );  
+//               },
+//               activeTintColor: 'blue',
+//               inactiveTintColor: 'gray',
+//               tabBarStyle:{ backgroundColor: 'lightblue', borderTopLeftRadius: 40, borderTopRightRadius: 40, zIndex: 1, position: 'absolute'},
+//               tabBarShowLabel: false,
+//             })}
+//           >
+//             <Tab.Screen name="Calls" component={CallsScreenWithProps} options={{headerShown: false, tabBarLabel: '' }} />
+//             <Tab.Screen name="Settings" component={SettingsScreenWithProps} options={{headerShown: false, tabBarLabel: ''}} />
+//           </Tab.Navigator>
+//         <View style={styles.call_float_container}>
+//           <View style={styles.upper}></View>
+//           <View style={styles.lower}></View>
+//           <TouchableOpacity style={styles.call_float} onPress={() => navigation.navigate('PopupScreen')}>
+//             <Image source={require('../assets/call.png')} style={styles.call_float_img}/>
+//           </TouchableOpacity>
+//         </View>
+//       </View>
+//     )
+//   }
+
+//   function store ( userItem ) {
+//     setUser(userItem);
+//   }
+
+//   function CallCalling ({ navigation }){
+//     return <MakeCallScreen navigation={navigation} user={user}/>
+//   };
+
+//   function CallAccount ({ navigation }){
+//     return <AccountScreen  userToken={userToken} navigation={navigation}/>
+//   }
+
+//   return (
+//     <View style={[appStyles.background, appStyles.container]}>
+//       <NavigationContainer>
+//         <Stack.Navigator>
+//           <Stack.Screen name="MainScreen" component={MainScreen} options={{headerShown: false}}/>
+//           <Stack.Screen name="PopupScreen" component={CallCalling} options={{presentation: 'card', headerShown: false}}/>
+//           <Stack.Screen name="Account" component={CallAccount} options={{presentation: 'modal', headerShown: false}}/>
+//         </Stack.Navigator>
+//       </NavigationContainer> 
+//     </View>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer, navigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { useStyle } from '../AppStyle';
+import CallsScreen from './CallsScreen';
+import SettingsScreen from './SettingsScreen';
+import MakeCallScreen from './makeCallScreen';
+import AccountScreen from './AccountScreen';
+import { View, Text, Image, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();  
+ const Drawer = createDrawerNavigator();
+
+
+  function MainScreen({navigation}) {
+    useEffect(() => {
+      toBlue();
+    }, [])
+    return (
+      <View style={[appStyles.container, appStyles.background]}>
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ focused }) => {
+                let imageSource;
+                let imageSize = 30;
+                const imageOpacity = focused ? 1 : 0.5;
+                if (route.name === 'Calls') {
+                  imageSource = require('../assets/call.png');
+                } 
+                else if (route.name === 'Settings') {
+                  imageSource = require('../assets/settings.png');
+                }
+                return (
+                  <View style={styles.tabIconContainer}>
+                    <Image
+                      source={imageSource}
+                      style={{ width: imageSize, height: imageSize, opacity: imageOpacity }}
+                    />
+                    {focused && (<Text style={{fontSize: 10,}}>{route.name}</Text>)}
+                  </View>
+                );  
+              },
+              activeTintColor: 'blue',
+              inactiveTintColor: 'gray',
+              tabBarStyle:{ backgroundColor: 'lightblue', borderTopLeftRadius: 40, borderTopRightRadius: 40, zIndex: 1, position: 'absolute'},
+              tabBarShowLabel: false,
+            })}
+          >
+            <Tab.Screen name="Calls" component={CallsScreenWithProps} options={{headerShown: false, tabBarLabel: '' }} />
+            <Tab.Screen name="Settings" component={SettingsScreenWithProps} options={{headerShown: false, tabBarLabel: ''}} />
+          </Tab.Navigator>
+        <View style={styles.call_float_container}>
+          <View style={styles.upper}></View>
+          <View style={styles.lower}></View>
+          <TouchableOpacity style={styles.call_float} onPress={() => navigation.navigate('PopupScreen')}>
+            <Image source={require('../assets/call.png')} style={styles.call_float_img}/>
+          </TouchableOpacity>
+        </View>
+      </View>
+    )
+  }
+
+function DrawerStack() {
+  return(
+    <Drawer.Navigator
+      drawerPosition='left'
+      initialRouteName='Main'
+      drawerStyle={{
+        width: 250
+      }}
+      screenOptions={{headerShown: false}}
+      drawerContent={({navigation})=> <DrawerContainer navigation={navigation}/>}
+    >
+      <Drawer.Screen name='Main' component={MainNavigator} />
+    </Drawer.Navigator>
+  )
+} 
+
+function MainNavigator() {
+  return(
+    <Stack.Navigator
+      screenOptions={{
+          headerTitleStyle: {
+            fontWeight: 'bold',
+            textAlign: 'center',
+            alignSelf: 'center',
+            flex: 1,
+          }
+      }}
+    >
+      <Stack.Screen name='Home' component={MainScreen} />
+    </Stack.Navigator>
+  )
+} 
+
+export default function App(){
+  return(
+    <NavigationContainer>
+      {/* <DrawerStack/> */}
+      <Text>zbs</Text>
+    </NavigationContainer>
+  )
+}
+
+const styles = StyleSheet.create({
+  call_float_container:{
+    position: 'absolute',
+    height: 80,
+    width: 80,
+    borderRadius: 50,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: Platform.OS === 'ios' ? 40 : 10,
+    alignSelf: 'center',
+    zIndex: 2,
+    overflow: 'hidden',
+  },
+  upper:{
+    height: '51%',
+    width: '100%',
+    backgroundColor: 'transparent',
+  },
+  lower: {
+    height: '49%',
+    width: '100%',
+    backgroundColor: 'white',
+  },
+  call_float:{
+    position: 'absolute',
+    height: 70,
+    width: 70,
+    borderRadius: 50,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    backgroundColor: '#28a745',
+    zIndex: 2,
+  },
+  tabIconContainer: {
+    alignItems: 'center',
+  },
+  tabLabel: {
+    color: 'blue',
+  },
+  call_float_img: {
+    maxHeight: '70%',
+    maxWidth: '70%',
+    resizeMode: 'contain',
+  },
+  nav_container: {
+    backgroundColor: 'black'
+  },
+});
+
+
+// import React from "react";
+// import { View, Text, Button } from "react-native";
+
+// export default function Home({ navigation }) {
+//   return(
+//     <Text>asdasdfasd</Text>
+//   )
+// }
+

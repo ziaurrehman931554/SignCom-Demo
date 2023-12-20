@@ -1,0 +1,33 @@
+{
+  "expo": {
+    "name": "SignCom",
+    "slug": "SignCom Video Calling | Hand Sign Recognition",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/logo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splashBackground.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#8EDFEB",
+      "height": "20%",
+      "width": "20%"
+
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/logo.png"
+    }
+  }
+}
