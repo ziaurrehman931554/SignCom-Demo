@@ -12,7 +12,6 @@
       "backgroundColor": "#8EDFEB",
       "height": "20%",
       "width": "20%"
-
     },
     "assetBundlePatterns": [
       "**/*"
@@ -24,10 +23,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.zia.signcom"
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c2e7760c-95bf-4fa9-a1c8-4b834d76aa8d"
+      }
     }
   }
 }
