@@ -2,20 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, Button, StyleSheet, SafeAreaView, TouchableOpacity, Image, TextInput, ImageBackground } from 'react-native';
 import { useStyle } from '../AppStyle';
 
-const CallScreen = ({navigation, user}) => { 
+const CallScreen = ({navigation, route}) => { 
   const { appStyles, toggleBG, toggleColor, toBlue, toWhite } = useStyle();
+  let user = route?.params?.user;
   const u = user? user.Name: '';
   const [callID, setCallId] = useState('-');
   const [joinID, setJoinId] = useState('');
-
+ 
   const generateCallID = () => {
     const id = Math.floor(Math.random() * 1000000);
     setCallId(id);
+    setTimeout(() => {
+      if (user?.Name) {
+        navigation.navigate('MakeCall', {user : user});
+      } else {
+        navigation.navigate('MakeCall', { user : {Name: ''} });
+      }
+    }, 3000)
   }
 
   const HandleJoin = () => {
-    if (joinID == callID) {
-      navigation.navigate('Call', {user: user});
+    if (user?.Name) {
+      navigation.navigate('MakeCall', {user : user});
+    } else {
+      navigation.navigate('MakeCall', { user : {Name: ''} });
     }
   }
 

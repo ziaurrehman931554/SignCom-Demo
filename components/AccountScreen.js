@@ -3,11 +3,10 @@ import { View, Text, Button, TouchableOpacity, StyleSheet, Image, Platform } fro
 import { useStyle } from '../AppStyle';
 
 export default function AccountScreen({userToken, onLogout, navigation}){
-  const { toWhite } = useStyle();
     return (
         <View style={styles.container}>
             <View style={styles.header}>
-                <TouchableOpacity style={styles.backContainer} onPress={navigation.navigate('Home')}>
+                <TouchableOpacity style={styles.backContainer} onPress={() => navigation.navigate('Home')}>
                     <Text>🔙</Text>
                 </TouchableOpacity>
                 <Text style={styles.headerText}>Account</Text>

@@ -14,7 +14,7 @@ import HomeScreen from './HomeScreen';
 import CallScreen from './CallScreen';
 import HistoryScreen from './HistoryScreen';
 import AccountScreen from './AccountScreen';
-
+import CallingScreen from './CallingScreen';
 import SettingsScreen from './SettingsScreen';
 
 const Tab = createBottomTabNavigator();
@@ -29,17 +29,11 @@ export default function Home({ onLogout, userToken, reset}){
 
   useEffect(() => {
     toHomeColor();
-  }, [userToken]);
+  }, []);
 
   function CallHome({navigation}) {
     return(
       <HomeScreen userToken={users} store={store} navigation={navigation}/>
-    )
-  }
-
-  function CallCall({navigation}) {
-    return(
-      <CallScreen navigation={navigation} user={user}/>
     )
   }
 
@@ -121,7 +115,7 @@ export default function Home({ onLogout, userToken, reset}){
           })}
         >
         <Tab.Screen name='Home' component={CallHome} options={{headerShown: false, tabBarLabel: '' }}/>
-        <Tab.Screen name='Call' component={CallCall} options={{headerShown: false, tabBarLabel: '' }}/>
+        <Tab.Screen name='Call' component={CallScreen} options={{headerShown: false, tabBarLabel: '' }}/>
         <Tab.Screen name='History' component={CallHistory} options={{headerShown: false, tabBarLabel: '' }}/>
         <Tab.Screen name='Account' component={CallAccount} options={{headerShown: false, tabBarLabel: '' }}/>
       </Tab.Navigator>
@@ -136,8 +130,8 @@ export default function Home({ onLogout, userToken, reset}){
     return(
       <Stack.Navigator>
         <Stack.Screen name='MainScreen' component={MainScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='MakeCall' component={MainScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='Settings' component={MainScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='MakeCall' component={CallingScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='Settings' component={SettingsScreen} options={{headerShown: false}}/>
         <Stack.Screen name='About' component={MainScreen} options={{headerShown: false}}/>
       </Stack.Navigator>
     )

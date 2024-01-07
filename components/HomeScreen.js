@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, SafeAreaView,ImageBackground , StyleSheet, Image, TextInput, FlatList, Button, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, SafeAreaView,ImageBackground , StyleSheet, Image, TextInput, FlatList, Button, ScrollView, TouchableOpacity, TouchableHighlight, Platform } from 'react-native';
 import { useUser } from '../UserContext';
 import { useStyle } from '../AppStyle';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -22,25 +22,38 @@ const HomeScreen = ({userToken, store, navigation}) => {
   }, []);
 
     const renderFavorites = () => {
-      return(
-        <ScrollView horizontal={true} contentContainerStyle={styles.fav_wrapper} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-          {userToken.favorites.map((item) => (
-            <TouchableOpacity style={styles.fav_container} key={item.Name} onPress={() => {store(item); navigation.navigate('Call');}}>
-              <View style={styles.fav_img}>
-                <Image source={require('../assets/Profile.png')} style={styles.fav_profileImage} />
-              </View>
-              <Text style={styles.fav_name}>{item.Name}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )
-    }
+    return (
+      <ScrollView
+        horizontal
+        contentContainerStyle={styles.fav_wrapper}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
+        {userToken.favorites.map((item) => (
+          <TouchableOpacity
+            style={styles.fav_container}
+            key={item.Name}
+            onPress={() => navigation.navigate('Call', { user: item })}
+          >
+            <View style={styles.fav_img}>
+              <Image source={require('../assets/Profile.png')} style={styles.fav_profileImage} />
+            </View>
+            <Text style={styles.fav_name}>{item.Name}</Text>  
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+    );
+  };
 
     const renderRecent = () => {
       return (
         <>
         {userToken.recent.map((item) => (
-          <TouchableOpacity style={styles.recent_container} key={item.Name} onPress={() => {store(item); navigation.navigate('PopupScreen');}}>
+          <TouchableOpacity
+            style={styles.recent_container} 
+            key={item.Name} 
+            onPress={() => navigation.navigate('Call', { user: item })}
+          >
             <View style={styles.recent_img}>
               <Image source={require('../assets/Profile.png')} style={styles.recent_profileImage} />
             </View>
