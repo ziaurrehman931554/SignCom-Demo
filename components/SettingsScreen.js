@@ -1,199 +1,255 @@
-import React, { useEffect } from 'react';
-import { View, Text, Button, SafeAreaView, Image, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { BlurView } from '@react-native-community/blur';
-import { Linking, Platform } from 'react-native';
-import { StoreReview } from 'react-native';
-import InAppReview from 'react-native-in-app-review';
-import { useUser } from '../UserContext';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Image, TextInput, Platform } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
+import RNPickerSelect from 'react-native-picker-select';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import { useStyle } from '../AppStyle';
-import { createStackNavigator } from '@react-navigation/stack';
-import { useIsFocused } from '@react-navigation/native';
+import { useUser } from '../UserContext';
 
-const Stack = createStackNavigator();
+export default function SettingsScreen({ userToken }) {
+  const { updateUserByEmail } = useUser();
+  const { toWhite } = useStyle();
+  const navigation = useNavigation();
+  const navigationState = useNavigationState((state) => state);
+  const [ isKBActive, setIsKBActive ] = useState(false);
+  const [ hidePass, setHidePass ] = useState(true);
 
-const SettingsScreen = ({ userToken, onLogout, navigation }) => {
-  const { appStyles, toggleBG, toggleColor, toBlue, toWhite } = useStyle();
-  const isFocused = useIsFocused();
+  const [ user, setUser ] = useState(
+    { Name: userToken.Name, email: userToken.email, password: userToken.password, type: userToken.type }
+  )
 
-  const { findUserByEmail } = useUser();
-  const userData = findUserByEmail(userToken);
+  const togglePasswordVisibility = () => {
+    setHidePass((prev) => !prev);
+  };
+
+  const handleInputChange = (fieldName, value) => {
+    setUser((prevUser) => ({
+      ...prevUser,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleSave = () => {
+    updateUserByEmail(userToken.email, user);
+    alert("User Data Updated!");
+    setTimeout(() => {
+      navigation.goBack();
+    }, 3000);
+  };
 
   useEffect(() => {
-    if (isFocused) {
-      toBlue();
-    }
-  }, [isFocused]);
-
-  function Links({ navigation }) {
-    return (
-      <View style={[appStyles.container]}>
-        <View style={styles.header}>
-          <View style={styles.img_container}>
-            <Image source={require('../assets/Profile.png')} style={styles.img} />
-          </View>
-          <Text style={styles.name}>{userData.Name}</Text>
-        </View>
-        <ScrollView style={styles.body}>
-          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Account')}><Text style={{ fontSize: 18, }}>Account</Text></TouchableOpacity>
-          <View style={styles.line}></View>
-          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Privacy')}><Text style={{ fontSize: 18, }}>Privacy</Text></TouchableOpacity>
-          <View style={styles.line}></View>
-          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Notification')}><Text style={{ fontSize: 18, }}>Notification</Text></TouchableOpacity>
-          <View style={styles.line}></View>
-          <TouchableOpacity style={styles.item} onPress={() => Rate5Star}><Text style={{ fontSize: 18, }}>Rate 5 Star 🌟</Text></TouchableOpacity>
-          <View style={styles.line}></View>
-          <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('TermsNConditions')}><Text style={{ fontSize: 18, }}>Terms & Conditions</Text></TouchableOpacity>
-          <TouchableOpacity onPress={onLogout} style={{padding: 15, backgroundColor: 'lightblue', borderRadius: 50, alignSelf: 'center', margin: 10,}}>
-            <Text>Logout</Text>
-          </TouchableOpacity>
-        </ScrollView>
-        <View style={styles.footer}>
-          <Text style={{ fontSize: 15, }}>Made by ❤️ in <Text style={{ fontSize: 17, color: 'green', }}>Pakistan</Text></Text>
-        </View>
-      </View>
-    );
-  };
-
-  function Privacy({ navigation }) {
-    return (
-      <>
-        <Text>This is the privacy Screen</Text>
-        <Button title='Go Back' onPress={() => navigation.goBack()}/>
-      </>
-    );
-  };
-
-  function Notification({ navigation }) {
-    return (
-      <>
-        <Text>This is the Notification Screen</Text>
-        <Button title='Go Back' onPress={() => navigation.goBack()}/>
-      </>
-    );
-  };
-
-  function Rate5Star({ navigation }) {
-    const handleRateApp = async () => {
-      if (Platform.OS === 'ios' && StoreReview.requestReview) {
-        try {
-          await StoreReview.requestReview();
-        } catch (error) {
-          console.error('Failed to request a review:', error);
-          openAppStoreLink();
-        }
-      } else if (Platform.OS === 'android' && InAppReview.RequestInAppReview) {
-        try {
-          await InAppReview.RequestInAppReview();
-        } catch (error) {
-          console.error('Failed to request a review:', error);
-          openAppStoreLink();
-        }
-      } else {
-        openAppStoreLink();
-      }
-    };
-  };
-
-  const openAppStoreLink = () => {
-    const storeUrl = Platform.OS === 'ios'
-      ? 'https://apps.apple.com/us/app/among-us/id1351168404'
-      : 'market://details?id=com.innersloth.spacemafia';
-    Linking.openURL(storeUrl).catch((err) => console.error('Error opening store link', err));
-  };
-
-  function TermsNConditions({ navigation }) {
-    return (
-      <>
-        <Text>This is the Terms and Conditions Screen</Text>
-        <Button title='Go Back' onPress={() => navigation.goBack()}/>
-      </>
-    );
-  };
+    toWhite();
+  }, [navigationState])
 
   return (
     <View style={styles.container}>
-      <Stack.Navigator>
-        <Stack.Screen name="links" component={Links} options={{ headerShown: false, presentation: 'card' }} />
-        <Stack.Screen name="Privacy" component={Privacy} options={{ headerShown: false, presentation: 'card' }} />
-        <Stack.Screen name="Notification" component={Notification} options={{ headerShown: false, presentation: 'card' }} />
-        <Stack.Screen name="TermsNConditions" component={TermsNConditions} options={{ headerShown: false, presentation: 'card' }} />
-      </Stack.Navigator>
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBTNContainer}>
+          <Text style={styles.backBTN}>🔙</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerText}>Settings</Text>
+      </View>
+      <View style={styles.bodyContainer}>
+        <View style={styles.infoContainer}>
+          <Text style={styles.YPI}>Your Profile Information</Text>
+          <View style={styles.profileImageContainer}>
+            <View style={styles.imageContainer}>
+              <Image source={require('../assets/Profile.png')} style={styles.image}/>
+            </View>
+            <View style={styles.editContainer}>
+              <Image source={require('../assets/edit.png')} style={styles.edit}/>
+            </View>
+          </View>
+          <Text style={styles.PI}>Personal Information</Text>
+          <View style={styles.entityContainer}>
+            <Text style={styles.entityName}>Name</Text>
+            <TextInput style={styles.entityValue} placeholder='Enter Your name' value={user.Name} onChangeText={(text) => handleInputChange('Name', text)}></TextInput>
+          </View>
+          <View style={styles.entityContainer}>
+            <Text style={styles.entityName}>Email</Text>
+            <TextInput style={styles.entityValue} placeholder='Enter Your email' value={user.email} onChangeText={(text) => handleInputChange('email', text)}></TextInput>
+          </View>
+          <TouchableOpacity style={styles.entityContainer} onPress={togglePasswordVisibility}>
+            <Text style={styles.entityName}>Password</Text>
+            <TextInput style={styles.entityValue} placeholder='Enter Your password' secureTextEntry={hidePass} value={user.password} onChangeText={(text) => handleInputChange('password', text)}></TextInput>
+          </TouchableOpacity>
+          <View style={styles.entityContainer}>
+            <Text style={styles.entityName}>Type</Text>
+            {/* {Platform.OS === 'ios' && ( */}
+              <RNPickerSelect
+              value={user.type}
+              items={[
+                { label: 'Normal', value: 'normal' },
+                { label: 'Special', value: 'special' },
+              ]}
+              onValueChange={(value) => handleInputChange('type', value)}
+              style={pickerSelectStyles}
+            />
+            {/* )} */}
+          </View>
+        </View>
+        { !isKBActive && (
+          <TouchableOpacity style={styles.saveContainer} onPress={handleSave}>
+            <Text style={styles.save}>Save</Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
+}
+
+const pickerSelectStyles = {
+  inputIOS: {
+    fontSize: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    color: '#909BB1',
+    alignItems: 'center',
+    borderRadius: 4,
+    textAlign: 'right',
+  },
+  inputAndroid: {
+    fontSize: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    color: '#909BB1',
+    alignItems: 'center',
+    borderRadius: 4,
+    textAlign: 'right',
+  },
 };
+
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    height: '100%',
-  },
-  footer: {
-    position: 'absolute',
-    width: '100%',
-    bottom: Platform.OS === 'ios' ? 120 : 90,
-    alignItems: 'center',
-    textAlign: 'center',
-  },
-  header: {
-    backgroundColor: 'lightblue',
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-    width: '100%',
-    height: '30%',
-    overflow: 'hidden',
-    paddingTop: 10,
-    paddingHorizontal: 7,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 2,
-  },
-  img_container: {
-    width: 120,
-    height: 120,
-    overflow: 'hidden',
-    borderRadius: 60,
-    padding: 1,
+    flex: 1,
     backgroundColor: 'white',
-    borderColor: 'black',
-    borderWidth: 1,
   },
-  img: {
-    height: '100%',
-    width: '100%',
-    alignSelf: 'center',
-    justifyContent: 'center',
-  },
-  name: {
-    fontSize: 35,
-    fontWeight: 'bold',
-    padding: 3,
-  },
-  body: {
-    width: '100%',
-    padding: 10,
-    marginVertical: -50,
-    paddingVertical: 60,
-  },
-  line: {
-    height: 1,
-    backgroundColor: 'blue',
-    opacity: 0.5,
-    margin: 10,
-    width: '95%',
-    alignSelf: 'center',
-  },
-  item: {
-    width: '98%',
-    alignSelf: 'center',
+  headerContainer: {
     display: 'flex',
-    alignItems: 'flex-start',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    margin: 5,
+    marginLeft: 20,
+  },
+  backBTNContainer: {
+    display: 'flex',
+    alignItems: 'center',
     justifyContent: 'center',
+    width: 63,
+    height: 34.42,
+    borderRadius: 20,
+    backgroundColor: '#5164BF',
+  },
+  backBTN: {
+    fontSize: 20,
+    color: 'white',
+  },
+  headerText: {
+    fontSize: 20,
+    marginLeft: 20,
+  },
+  bodyContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 5,
+  },
+  infoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+  },
+  YPI: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#878787',
+    marginVertical: 15,
+    opacity: 0.7,
+  },
+  profileImageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imageContainer: {
+    width: 150,
+    height: 150,
+    borderRadius: 80,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  image: {
+    width: 150,
+    height: 150,
+  },
+  editContainer: {
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    width: 40,
+    height: 40,
+    borderRadius: 25,
+    backgroundColor: '#5164BF',
+    borderColor: 'white',
+    borderWidth: 2,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  edit: {
+    width: 20,
+    height: 20,
+  },
+  PI: {
+    fontSize: 17,
+    marginBottom: 10,
+    lineHeight: 22,
+    textAlign: 'left',
+    width: '95%',
+    padding: 10,
+    marginTop: 30,
+    marginBottom: 5,
+    color: '#5164BF',
+    opacity: 0.7,
+  },
+  entityContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '95%',
+    margin: 5,
+    backgroundColor: '#F4F4F4',
+    padding: 15,
     borderRadius: 10,
-    paddingHorizontal: 15,
-    paddingVertical: 10,
-    backgroundColor: 'lightblue',
-  }
-});
-
-export default SettingsScreen
+    height: 50,
+  },
+  entityName: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#5164BF',
+  },
+  entityValue: {
+    fontSize: 12,
+    color: '#909BB1',
+    textAlign: 'right',
+  },
+  saveContainer: {
+    height: 60,
+    width: 175,
+    borderRadius: 50,
+    backgroundColor: '#5164BF',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 5,
+  },
+  save: {
+    fontSize: 17,
+    color: 'white',
+  },
+})

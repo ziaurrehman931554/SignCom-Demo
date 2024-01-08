@@ -7,19 +7,22 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { useIsFocused } from '@react-navigation/native';
 import  MakeCallScreen from './CallScreen'
 import  AccountScreen from './AccountScreen'
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 const Stack = createStackNavigator();
- 
-const HomeScreen = ({userToken, store, navigation}) => {
+
+const HomeScreen = ({userToken, store}) => {
   const { appStyles, toHomeColor } = useStyle();
   const [search, setSearch] = useState('');
   const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  const navigationState = useNavigationState((state) => state);
 
   useEffect(() => {
     if (isFocused) {
       toHomeColor();
     }  
-  }, []);
+  }, [navigationState]);
 
     const renderFavorites = () => {
     return (
@@ -75,9 +78,9 @@ const HomeScreen = ({userToken, store, navigation}) => {
   return (
     <ImageBackground source={require('../assets/background.png')} style={styles.container}>
       <View style={styles.headerContainer}>
-        <View style={styles.menuContainer}>
+        <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate('Settings')}>
           <Image source={require('../assets/menu.png')} style={styles.menu}/>
-        </View>
+        </TouchableOpacity>
         <Text style={styles.hi}>Hi,</Text>
         <Text style={styles.name}>{userToken.Name}</Text>
         <View style={styles.searchContainer}>

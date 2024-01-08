@@ -16,6 +16,8 @@ import HistoryScreen from './HistoryScreen';
 import AccountScreen from './AccountScreen';
 import CallingScreen from './CallingScreen';
 import SettingsScreen from './SettingsScreen';
+import AboutScreen from './AboutScreen';
+import DrawerScreen from './DrawerScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();  
@@ -46,6 +48,12 @@ export default function Home({ onLogout, userToken, reset}){
   function CallAccount({navigation}) {
     return(
       <AccountScreen userToken={users} onLogout={onLogout} navigation={navigation}/>
+    )
+  }
+
+  function CallSetting({navigation}) {
+    return(
+      <SettingsScreen userToken={users} navigation={navigation}/>
     )
   }
 
@@ -131,8 +139,9 @@ export default function Home({ onLogout, userToken, reset}){
       <Stack.Navigator>
         <Stack.Screen name='MainScreen' component={MainScreen} options={{headerShown: false}}/>
         <Stack.Screen name='MakeCall' component={CallingScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='Settings' component={SettingsScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='About' component={MainScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='Settings' component={CallSetting} options={{headerShown: false}}/>
+        <Stack.Screen name='About' component={AboutScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='Drawer' component={DrawerScreen} options={{headerShown: false}}/>
       </Stack.Navigator>
     )
   } 

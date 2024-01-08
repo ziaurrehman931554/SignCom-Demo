@@ -31,7 +31,6 @@ export default function CallingScreen({ route }) {
   }
 
   const handleEndCall = () => {
-    // Perform cleanup, navigate back, etc.
     setIsCallOngoing(false);
     navigation.goBack();
   };
@@ -45,7 +44,6 @@ export default function CallingScreen({ route }) {
   };
 
   const toggleMic = () => {
-    // Implement logic to toggle microphone status
     setIsMicMuted(!isMicMuted);
   };
 
