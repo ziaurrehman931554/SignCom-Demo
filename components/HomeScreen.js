@@ -78,7 +78,7 @@ const HomeScreen = ({userToken, store}) => {
   return (
     <ImageBackground source={require('../assets/background.png')} style={styles.container}>
       <View style={styles.headerContainer}>
-        <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate('Settings')}>
+        <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.navigate('Drawer')}>
           <Image source={require('../assets/menu.png')} style={styles.menu}/>
         </TouchableOpacity>
         <Text style={styles.hi}>Hi,</Text>

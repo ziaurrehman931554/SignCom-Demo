@@ -134,14 +134,30 @@ export default function Home({ onLogout, userToken, reset}){
     setUser(userItem);
   }
 
+  function CallDrawer({ navigation }){ 
+    return(
+      <DrawerScreen navigation={navigation} user={users} onLogout={onLogout}/>
+    )
+  }
   function MainNavigator() {
     return(
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="MainScreen">
         <Stack.Screen name='MainScreen' component={MainScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='MakeCall' component={CallingScreen} options={{headerShown: false}}/>
+        <Stack.Screen name='MakeCall' component={CallingScreen} options={{headerShown: false, gestureEnabled: false}}/>
         <Stack.Screen name='Settings' component={CallSetting} options={{headerShown: false}}/>
         <Stack.Screen name='About' component={AboutScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='Drawer' component={DrawerScreen} options={{headerShown: false}}/>
+        <Stack.Screen 
+          name='Drawer' 
+          component={CallDrawer} 
+          options={{
+            headerShown: false, 
+            presentation: 'transparentModal',
+            gestureEnabled: false,
+            cardStyle: {
+              backgroundColor: 'transparent',
+            }
+          }}
+        />
       </Stack.Navigator>
     )
   } 

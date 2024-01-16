@@ -32,9 +32,9 @@ const CallScreen = ({navigation, route}) => {
   return (
     <ImageBackground source={require('../assets/background.png')}>
       <View style={styles.header}>
-        <View style={styles.backContainer}>
+        <TouchableOpacity style={styles.backContainer} onPress={() => navigation.navigate('Home')}>
           <Text style={styles.back}>🔙</Text>
-        </View>
+        </TouchableOpacity>
         <Text style={styles.headerText}>Make a Call</Text>
       </View>
       <View style={styles.joinContainer}>
